@@ -2,31 +2,37 @@ module LocalTimeHelper
   DEFAULT_FORMAT = '%B %e, %Y %l:%M%P'
 
   def local_time(time, options = nil)
-    time = utc_time(time)
+    if time.present?
+      time = utc_time(time)
 
-    options, format = extract_options_and_value(options, :format)
-    format = find_time_format(format)
+      options, format = extract_options_and_value(options, :format)
+      format = find_time_format(format)
 
-    options[:data] ||= {}
-    options[:data].merge! local: :time, format: format
+      options[:data] ||= {}
+      options[:data].merge! local: :time, format: format
 
-    time_tag time, time.strftime(format), options
+      time_tag time, time.strftime(format), options
+    end
   end
 
   def local_date(time, options = nil)
-    options, format = extract_options_and_value(options, :format)
-    options[:format] = format || '%B %e, %Y'
-    local_time time, options
+    if time.present?
+      options, format = extract_options_and_value(options, :format)
+      options[:format] = format || '%B %e, %Y'
+      local_time time, options
+    end
   end
 
   def local_relative_time(time, options = nil)
-    time = utc_time(time)
-    options, type = extract_options_and_value(options, :type)
+    if time.present?
+      time = utc_time(time)
+      options, type = extract_options_and_value(options, :type)
 
-    options[:data] ||= {}
-    options[:data].merge! local: type
+      options[:data] ||= {}
+      options[:data].merge! local: type
 
-    time_tag time, time.strftime(DEFAULT_FORMAT), options
+      time_tag time, time.strftime(DEFAULT_FORMAT), options
+    end
   end
 
   def local_time_ago(time, options = nil)
